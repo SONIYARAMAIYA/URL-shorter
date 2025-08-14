@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en" data-theme="emerald">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Stats — Shortly</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@latest/dist/full.css" rel="stylesheet">
+</head>
+<body class="bg-base-100 min-h-screen flex items-center justify-center p-4">
+  <div class="card w-full max-w-2xl shadow-xl bg-neutral">
+    <div class="card-body">
+      <h2 class="card-title text-3xl text-secondary-content justify-center">Short Link Stats</h2>
+
+      <div class="stats stats-vertical lg:stats-horizontal bg-base-200 shadow">
+        <div class="stat">
+          <div class="stat-title">Short URL</div>
+          <div class="stat-value text-primary"><a href="{{ short_link }}" target="_blank">{{ short_link }}</a></div>
+          <div class="stat-desc">Go to link</div>
+        </div>
+        <div class="stat">
+          <div class="stat-title">Long URL</div>
+          <div class="stat-value text-accent"><a href="{{ entry.long_url }}" target="_blank">{{ entry.long_url }}</a></div>
+          <div class="stat-desc">Original destination</div>
+        </div>
+        <div class="stat">
+          <div class="stat-title">Clicks</div>
+          <div class="stat-value text-info">{{ entry.clicks }}</div>
+          <div class="stat-desc">Total visits</div>
+        </div>
+        <div class="stat">
+          <div class="stat-title">Created At</div>
+          <div class="stat-value text-warning">{{ entry.created_at.strftime('%Y-%m-%d') }}</div>
+          <div class="stat-desc">{{ entry.created_at.strftime('%H:%M:%S') }}</div>
+        </div>
+      </div>
+
+      <div class="card-actions justify-center mt-6">
+        <a href="/" class="btn btn-secondary">Back</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

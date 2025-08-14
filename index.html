@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Shortly — Professional Palette</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --bg: #004d40;
+      --card: #00695c;
+      --accent: #fdd835;
+      --accent-hover: #ffeb3b;
+      --neutral: #eceff1;
+    }
+  </style>
+</head>
+<body class="bg-[var(--bg)] min-h-screen flex items-center justify-center p-6 text-neutral">
+  <div class="bg-[var(--card)] rounded-lg shadow-lg p-8 max-w-md w-full">
+    <h1 class="text-3xl font-semibold mb-6">Shortly</h1>
+    <form id="shortenForm" class="space-y-4">
+      <input id="longUrl" type="url" placeholder="https://example.com"
+             class="w-full px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--accent)]"/>
+      <button type="submit" id="submitBtn"
+              class="w-full bg-[var(--accent)] hover:bg-[var(--accent-hover)] text-gray-800 py-2 rounded transition">
+        Shorten
+      </button>
+    </form>
+    <div id="result" class="mt-6 bg-[var(--neutral)] p-4 rounded hidden">
+      <label class="block text-gray-800 font-medium mb-1">Short link</label>
+      <div class="flex items-center justify-between">
+        <input id="shortLink" readonly class="flex-1 px-3 py-2 border border-gray-300 rounded text-gray-800"/>
+        <button id="copyBtn" class="ml-2 text-[var(--accent)] hover:text-[var(--accent-hover)]">Copy</button>
+      </div>
+      <p id="feedback" class="mt-2 text-sm text-green-300 hidden">Copied!</p>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('shortenForm');
+    const result = document.getElementById('result');
+    const shortLink = document.getElementById('shortLink');
+    const feedback = document.getElementById('feedback');
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const resp = await fetch('/api/shorten', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ long_url: document.getElementById('longUrl').value })
+      });
+      const data = await resp.json();
+      if (resp.ok) {
+        shortLink.value = data.short;
+        result.classList.remove('hidden');
+        feedback.classList.add('hidden');
+      } else {
+        alert(data.error || 'Error');
+      }
+    });
+
+    document.getElementById('copyBtn').onclick = async () => {
+      try {
+        await navigator.clipboard.writeText(shortLink.value);
+        feedback.classList.remove('hidden');
+      } catch {
+        alert('Copy failed');
+      }
+    };
+  </script>
+</body>
+</html>
